@@ -2,31 +2,35 @@ import {Box, Button, Container, HStack, Input, Text, Textarea, VStack} from "@ch
 import CreatableSelect from "react-select/creatable";
 import {v4 as uuidV4} from "uuid";
 import {useRef, useState} from "react";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 
-type Tag = {
-    id: string
-    label: string
+
+export type TagsType = {
+    id : string,
+    label : string
 }
 
-
-type newTasks = {
-    id : string,
+type defaultFormValue = {
     title : string,
-    tags : any[]
-    summery : string
+    tags : { id : string , label : string }[],
+    textArea : string
+
 }
 
 type NoteForm = {
-    onSubmit : ( {} : {title : string , textArea : string , tags : Tag[]})=> void
+    onSubmit : ( {} : {title : string , textArea : string , tags : TagsType[]})=> void
     onAddTags : (data : string) => void
-}
+} & Partial<defaultFormValue>
 
 
 
-const NoteForm = ({onSubmit , onAddTags} : NoteForm) : JSX.Element => {
+const NoteForm = ({onSubmit , onAddTags , title = '' , tags = [] , textArea = ''} : NoteForm) : JSX.Element => {
 
-    const [selectedTags , setTags] = useState<Tag[]>([])
+    const [localTags] = useLocalStorage<TagsType[]>('Tags' , [])
+
+    const [selectedTags , setTags] = useState<TagsType[]>(tags)
+
 
     const titleRef = useRef<HTMLInputElement>(null)
     const textAreaRef = useRef<HTMLTextAreaElement>(null)
@@ -52,6 +56,7 @@ const NoteForm = ({onSubmit , onAddTags} : NoteForm) : JSX.Element => {
 
 
 
+
     return (
 
         <Container maxW={'2xl'} h={'100vh'} py={8}>
@@ -64,7 +69,7 @@ const NoteForm = ({onSubmit , onAddTags} : NoteForm) : JSX.Element => {
 
                     <VStack width={'xl'}>
                         <Text>Title</Text>
-                        <Input placeholder={'add title ...'} ref={titleRef}/>
+                        <Input placeholder={'add title ...'} ref={titleRef} defaultValue={title}/>
                     </VStack>
 
 
@@ -76,12 +81,13 @@ const NoteForm = ({onSubmit , onAddTags} : NoteForm) : JSX.Element => {
                                              value={selectedTags?.map(tag => {
                                                  return {label: tag.label, value: tag.id}
                                              })}
-                            />
+                                             options={localTags.map((tag )  => ({label : tag.label , id : tag.id}))}
+                                             onChange={tags => setTags(tags.map(tag => ({label : tag.label , id : tag.value})))}/>
                         </Box>
                     </VStack>
                 </HStack>
 
-                <Textarea ref={textAreaRef} placeholder='Here is a sample placeholder' />
+                <Textarea ref={textAreaRef} placeholder='Here is a sample placeholder' defaultValue={textArea} />
 
                 <Button onClick={handelSubmit}>Submit</Button>
             </VStack>

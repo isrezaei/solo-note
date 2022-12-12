@@ -33,16 +33,16 @@ function Root() {
 
     return notes
 
-  } , [inputValue , selectedTag])
+  } , [inputValue , selectedTag , notes , tags])
 
 
-  console.log(selectedTag)
+  console.log(notes)
 
 
 
   const RENDER_TASKS = FILTER_BY_TAGS_ADN_TITLE.map(TASK => {
     return (
-        <VStack justify={'center'} key={TASK.id} w={"full"} h={'6vw'}  bg={'blackAlpha.200'} rounded={"xl"} >
+        <VStack onClick={() => navigate(`/detailsTasks/${TASK.id}`)} justify={'center'} key={TASK.id} w={"full"} h={'6vw'}  bg={'blackAlpha.200'} rounded={"xl"} >
           <Text fontSize={20} fontWeight={"bold"} color={"blue.600"}>{TASK.title}</Text>
           <HStack>{TASK.tags.map(tag => <Badge colorScheme='twitter'>{tag.label}</Badge>)}</HStack>
         </VStack>
@@ -89,7 +89,7 @@ function Root() {
 
         <HStack position={'absolute'} top={0} right={0} m={2}>
           <Button size={'xs'} bg={"twitter.400"} onClick={() => navigate('/buildTasks')}>Create</Button>
-          <Button size={'xs'} variant={'outline'} >Edit</Button>
+          <Button size={'xs'} variant={'outline'} >Edit Tags</Button>
         </HStack>
 
 

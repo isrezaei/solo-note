@@ -21,7 +21,7 @@ const BuildTasks = () => {
         setNotes(prevState => [...prevState , { ...NoteValue ,  id : uuidV4()  , tagsID : NoteValue.tags.map(tag => tag.id)}])
 
 
-    //? set on Tags data in tags state with uuId4 and tag label
+    //! set on Tags data in tags state with uuId4 and tag label
     const onCreateTags = (label : string) =>
         setTags(prevState => [...prevState , {id : uuidV4() , label : label}])
 
