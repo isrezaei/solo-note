@@ -6,7 +6,6 @@ export type TAGS_TYPES = {
 
 export type NotesType = {
     id : string
-    tags : {id : string , label : string}[]
     tagsID : string[]
     textArea : string
     title : string

@@ -1,6 +1,6 @@
 import {useParams, useNavigate, Outlet, useOutletContext} from "react-router-dom";
 import useLocalStorage from "../hooks/useLocalStorage";
-import {NotesType} from "../types/types";
+import {NotesType, TagsType} from "../types/types";
 import {useEffect, useMemo} from "react";
 import _ from "lodash";
 import {Badge, Button, Container, HStack, Text, Textarea, VStack} from "@chakra-ui/react";
@@ -15,15 +15,25 @@ const TaskDetails = () => {
 
 
     const [notes , setNotes] = useLocalStorage<NotesType[]>('NOTES' , [])
+    const [tags , setTags] = useLocalStorage<TagsType[]>('Tags' , [])
+
+    const ADD_TAGS_IN_NOTE_OBJECT = useMemo(() => {
+        return notes.map(value => {
+            return {
+                ...value ,
+                tags : tags.filter(tag => value.tagsID?.includes(tag.id))
+            }
+        })
+    } , [notes , tags])
 
 
-    console.log(notes)
+
 
     const RENDER_SPECIFIC_TASK = useMemo(() => {
 
-        return _.filter(notes , {id : paramsID})
+        return _.filter(ADD_TAGS_IN_NOTE_OBJECT , {id : paramsID})
 
-    } , [paramsID , notes])
+    } , [paramsID , ADD_TAGS_IN_NOTE_OBJECT])
 
 
     const DELETE_SPECIFIC_TASK = () =>

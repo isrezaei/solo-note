@@ -39,8 +39,8 @@ const EditTasks = () => {
         })
     }
 
-    const onCreateTags = (label : string) =>
-        setTags(prevState => [...prevState , {id : uuidV4() , label : label}])
+    const onCreateTags = (tagsInfo : {id : string , label : string}) =>
+        setTags(prevState => [...prevState , tagsInfo])
 
 
 

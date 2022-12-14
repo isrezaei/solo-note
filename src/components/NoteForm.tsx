@@ -15,19 +15,25 @@ type defaultFormValue = {
     title : string,
     tags : { id : string , label : string }[],
     textArea : string
-
 }
 
+export type NoteData = {
+    title: string
+    markdown: string
+    tags: { id : string , label : string }[]
+}
+
+
 type NoteForm = {
-    onSubmit : ( {} : {title : string , textArea : string , tags : TagsType[]})=> void
-    onAddTags : (data : string) => void
+    onSubmit : (data: any )=> void
+    onAddTags : (data : { id : string , label : string }) => void
 } & Partial<defaultFormValue>
 
 
 
 const NoteForm = ({onSubmit , onAddTags , title = '' , tags = [] , textArea = ''} : NoteForm) : JSX.Element => {
 
-    const [localTags] = useLocalStorage<TagsType[]>('Tags' , [])
+    const [localTags , set] = useLocalStorage<TagsType[]>('Tags' , [])
 
     const [selectedTags , setTags] = useState<TagsType[]>(tags)
 
@@ -43,13 +49,16 @@ const NoteForm = ({onSubmit , onAddTags , title = '' , tags = [] , textArea = ''
             tags : selectedTags
         })
 
+
     const handelAddTags = (label : string) =>
     {
-        //? add tage in selectedTags
-        setTags(prev =>[ ...prev , {id : uuidV4() , label}])
+        const newTag = {id : uuidV4() , label}
+
+        //? add tage in selectedTags FOR "tagID" in note array !
+        setTags(prev =>[ ...prev , newTag])
 
         //? add tage in onCreateTags
-        onAddTags(label)
+        onAddTags(newTag)
     }
 
 
@@ -81,7 +90,6 @@ const NoteForm = ({onSubmit , onAddTags , title = '' , tags = [] , textArea = ''
                                              value={selectedTags?.map(tag => {
                                                  return {label: tag.label, value: tag.id}
                                              })}
-                                             options={localTags.map((tag )  => ({label : tag.label , id : tag.id}))}
                                              onChange={tags => setTags(tags.map(tag => ({label : tag.label , id : tag.value})))}/>
                         </Box>
                     </VStack>
