@@ -3,8 +3,7 @@ import CreatableSelect from "react-select/creatable";
 import {v4 as uuidV4} from "uuid";
 import {useRef, useState} from "react";
 import useLocalStorage from "../hooks/useLocalStorage";
-
-
+import {useNavigate, useNavigation} from "react-router-dom";
 
 export type TagsType = {
     id : string,
@@ -37,18 +36,21 @@ const NoteForm = ({onSubmit , onAddTags , title = '' , tags = [] , textArea = ''
 
     const [selectedTags , setTags] = useState<TagsType[]>(tags)
 
+    const nav = useNavigate()
+
 
     const titleRef = useRef<HTMLInputElement>(null)
     const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
 
     const handelSubmit = () =>
+    {
         onSubmit({
             title : titleRef.current!.value,
             textArea : textAreaRef.current!.value,
             tags : selectedTags
         })
-
+    }
 
     const handelAddTags = (label : string) =>
     {
@@ -60,7 +62,6 @@ const NoteForm = ({onSubmit , onAddTags , title = '' , tags = [] , textArea = ''
         //? add tage in onCreateTags
         onAddTags(newTag)
     }
-
 
 
 
@@ -97,7 +98,10 @@ const NoteForm = ({onSubmit , onAddTags , title = '' , tags = [] , textArea = ''
 
                 <Textarea ref={textAreaRef} placeholder='Here is a sample placeholder' defaultValue={textArea} />
 
-                <Button onClick={handelSubmit}>Submit</Button>
+                <HStack>
+                    <Button disabled={false} onClick={handelSubmit}>Submit</Button>
+                    <Button  colorScheme={"twitter"}  onClick={() => nav('/')}>Back</Button>
+                </HStack>
             </VStack>
 
 

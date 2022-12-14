@@ -11,7 +11,7 @@ const TaskDetails = () => {
 
 
     const {id : paramsID} = useParams()
-    const navigate = useNavigate()
+    const nav = useNavigate()
 
 
     const [notes , setNotes] = useLocalStorage<NotesType[]>('NOTES' , [])
@@ -43,7 +43,7 @@ const TaskDetails = () => {
 
     //? When we delete this file, nothing remains in the "RENDER_SPECIFIC_TASK" array
     useEffect(() => {
-        if (RENDER_SPECIFIC_TASK.length === 0) return navigate('/')
+        if (RENDER_SPECIFIC_TASK.length === 0) return nav('/')
     } , [RENDER_SPECIFIC_TASK])
 
 
@@ -73,9 +73,9 @@ const TaskDetails = () => {
 
 
             <HStack position={'absolute'} top={0} right={0} m={2}>
-                <Button onClick={() => navigate(`/detailsTasks/${paramsID}/EditTask`)} size={"xs"} colorScheme={'twitter'}>Edit</Button>
+                <Button onClick={() => nav(`/detailsTasks/${paramsID}/EditTask`)} size={"xs"} colorScheme={'twitter'}>Edit</Button>
                 <Button onClick={DELETE_SPECIFIC_TASK} size={"xs"} colorScheme={"red"} variant={'outline'}>Delete</Button>
-                <Button size={"xs"} colorScheme={'blackAlpha'} variant={'outline'}>Back</Button>
+                <Button onClick={() => nav('/')} size={"xs"} colorScheme={'blackAlpha'} variant={'outline'}>Back</Button>
             </HStack>
 
 
